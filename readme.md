@@ -9,7 +9,7 @@ This demo uses a simple web application writtn in python using the flask framewo
 
 If you want to run this on a the sample data set loaded in Atlas that does not have the vector embeddings stored for the fullplot field then modify and execute the setupVectorSearch.py script. This will take a few minutes to run.
 
-Alternatively, you can use the data in the *movieData.json* export file and import using the following command (replace the details with your uri):
+Alternatively, you can use the data in the *movieData.json* export file (you'll need to uncompress *movieData.json.zip*) and import using the following command (replace the details with your uri):
 
 `mongoimport --uri "mongodb+srv://<username>:<password>@YourAtlasCluster.foo.mongodb.net" -d sample_mflix -c movies-copy --file movieData.json`
 

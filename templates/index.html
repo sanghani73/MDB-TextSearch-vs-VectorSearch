@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Lexend Deca';
+            display: flex;
+        }
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .search-box input[type="text"] {
+            /* flex: 1; */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 800px; 
+            margin-right: 5px;
+        }
+        .search-box button {
+            padding: 5px 10px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            
+        }
+        .spinner {
+            display: none;
+            font-size: 24px;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+        }
+        .search-results {
+            align-items: left;
+            width: 100%;
+            }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            font: 1em 'Lexend Deca Light';
+        }
+        th {
+            background-color: #00ed64;
+            color: black;
+            font-weight: bold;
+        }
+        tr:nth-child(odd) {
+            background-color: #f9ebff;
+        }
+        tr:hover {
+            background-color: #00ed64;
+        }
+        .row {
+            display: flex;
+            padding: 5px;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="search-box">
+        <h1>Movie Search</h1>
+        <form id="search-form" action="/" method="POST">
+            <div class="row"
+                <label for="vector_search">Vector Search?</label>
+                <input type="checkbox" name="vector_search" {{ vector }}>
+            </div>
+            <div class="row">
+                <input type="text" name="search_query" placeholder="What type of film are you looking for?" value="{{ search_query }}" required>
+                <button type="submit" class="loading">
+                    <span class="spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                    Go
+                </button>
+            </div>
+        </form>
+
+        <div class="search-results">
+            {% if results %}
+            <h4>Search Results:</h4>
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Plot</th>
+                    <th>Score</th>
+                </tr>
+                {% for movie in results %}
+                <tr>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.fullplot|safe }}</td>
+                    <td>{{ movie.score }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function() {
+            document.querySelector('.loading').setAttribute('disabled', 'disabled');
+            document.querySelector('.spinner').style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>
