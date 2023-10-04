@@ -86,6 +86,7 @@ def run_query(search_query, vector_search):
                 '_id': 0,
                 'title': 1,
                 'fullplot': 1,
+                'poster':1,
                 'score': {
                     '$meta': 'searchScore',
                 },
@@ -96,10 +97,12 @@ def run_query(search_query, vector_search):
     ]
     
     results = list(collection.aggregate(pipeline))
+    print('Search executed for ', search_query)
     client.close()
     
     if not(vector_search):
         for item in results:
+            print('got result: ', item['title'])
             item['fullplot'] = add_highlights(item['highlight'])
     
     return results

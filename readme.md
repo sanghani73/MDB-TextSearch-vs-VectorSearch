@@ -17,7 +17,7 @@ Alternatively, you can use the data in the *movieData.json* export file (you'll 
 mongoimport --uri "mongodb+srv://<username>:<password>@YourAtlasCluster.foo.mongodb.net" -d sample_mflix -c movies-copy --file movieData.json
 ```
 
-Once you have the data in the movies collection, navigate to the Atlas Search consle and ensure you have a search index created on the *fullplot* field and a vector index created on the *vectorPlot* field. Here are the JSON configurations for both these indexes:
+Once you have the data in the movies collection, navigate to the Atlas Search consle and ensure you have a search index created on the *fullplot* field (call this index "default") and an index created on the *vectorPlot* field (call this index "vectorIndex"). Here are the JSON configurations for both these indexes:
 
 ```
 {
