@@ -34,13 +34,14 @@ Once you have the data in the movies collection, navigate to the Atlas Search co
 {
   "mappings": {
     "dynamic": false,
-    "fields": {
-      "vectorPlot": {
-        "dimensions": 384,
-        "similarity": "euclidean",
-        "type": "knnVector"
+    "fields": [
+      {
+        "type": "vector",
+        "path": "vectorPlot",
+        "numDimensions": 384,
+        "similarity": "euclidean"
       }
-    }
+    ]
   }
 }
 ```

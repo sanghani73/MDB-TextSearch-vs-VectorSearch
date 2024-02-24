@@ -59,19 +59,22 @@ def run_query(search_query, vector_search):
     collection = db[collection_name]
 
     if vector_search:
-        search = {  '$search': {
-                        "index": "vectorIndex",
-                        "knnBeta": {
-                            "vector": generate_vector(search_query),
-                            "k": 20,
-                            "path": "vectorPlot"}
+        search = {  '$vectorSearch': {
+                        'index': 'vectorIndex', 
+                        'path': 'vectorPlot', 
+                        'queryVector': generate_vector(search_query),
+                        'numCandidates': 150, 
+                        'limit': 20
                     }
                 }
     else:
         search = {  '$search': {
                         'text': {
                             'query': search_query,
-                            'path': 'fullplot'
+                            'path': 'fullplot',
+                            # 'fuzzy': {
+                            #     'maxEdits': 2,
+                            # },                        
                         },
                         'highlight': { 
                             'path': 'fullplot' 

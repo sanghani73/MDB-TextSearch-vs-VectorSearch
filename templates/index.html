@@ -82,10 +82,10 @@
     <div class="search-box">
         <h1>Movie Search</h1>
         <form id="search-form" action="/" method="POST">
-            <div class="row"
+            <!-- <div class="row"
                 <label for="vector_search">Semantic (Vector) Search?</label>
                 <input type="checkbox" name="vector_search" {{ vector }}>
-            </div>
+            </div> -->
             <div class="row">
                 <input type="text" name="search_query" placeholder="What type of film are you looking for?" value="{{ search_query }}" required>
                 <button type="submit" class="loading">
@@ -94,6 +94,10 @@
                     </span>
                     Go
                 </button>
+            </div>
+            <div class="row"
+                <label for="vector_search">Semantic (Vector) Search?</label>
+                <input type="checkbox" name="vector_search" {{ vector }}>
             </div>
         </form>
 
