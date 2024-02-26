@@ -3,16 +3,17 @@
 # The following is the index definition for the vector index
 # Call this index "vextorIndex" in the search UI
 # {
-#     "mappings": {
-#         "dynamic": false,
-#         "fields": {
-#             "vectorPlot": {
-#                 "dimensions": 384,
-#                 "similarity": "dotProduct",
-#                 "type": "knnVector"
-#             }
-#         }
-#     }
+#   "mappings": {
+#     "dynamic": false,
+#     "fields": [
+#       {
+#         "type": "vector",
+#         "path": "vectorPlot",
+#         "numDimensions": 384,
+#         "similarity": "euclidean"
+#       }
+#     ]
+#   }
 # }
 # 
 # If need to tidy up the collection, delete the search index and unset the field: db.movies.updateMany({},{$unset:{"vectorPlot":""}})
