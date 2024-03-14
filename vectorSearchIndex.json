@@ -1,0 +1,14 @@
+{
+    "name": "vectorIndex",
+    "type": "vectorSearch",
+    "collectionName": "movies",
+    "database": "sample_mflix",
+    "fields": [
+      {
+        "type": "vector",
+        "path": "vectorPlot",
+        "numDimensions": 384,
+        "similarity": "euclidean"
+      }
+    ]
+}

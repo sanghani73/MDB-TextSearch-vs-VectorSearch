@@ -1,0 +1,13 @@
+{
+    "collectionName": "movies",
+    "database": "sample_mflix",
+    "mappings": {
+        "dynamic": false,
+        "fields": {
+          "fullplot": {
+            "type": "string"
+        }
+      }
+    },
+    "name": "default"
+}
