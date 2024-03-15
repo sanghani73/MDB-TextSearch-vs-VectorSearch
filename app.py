@@ -14,23 +14,29 @@ def index():
     if request.method == 'POST':
         search_query = request.form['search_query']
         vector_search = request.form.get('vector_search')
+        min_year = request.form['min_year']
+        if min_year == '':
+            min_year = 1900
+        min_rating = request.form['min_rating']
+        if min_rating == '':
+            min_rating = 0
         if (vector_search is None):
-            return redirect(url_for('search',search_query=search_query))
+            return redirect(url_for('search',search_query=search_query, min_year=min_year, min_rating=min_rating))
         else:
-            return redirect(url_for('vectorSearch',search_query=search_query))
+            return redirect(url_for('vectorSearch',search_query=search_query, min_year=min_year, min_rating=min_rating))
     return render_template('index.html')
 
-@app.route('/search/<search_query>', methods=['GET'])
-def search(search_query):
+@app.route('/search/<search_query>/<int(signed=True):min_year>/<float(signed=True):min_rating>', methods=['GET'])
+def search(search_query, min_year, min_rating):
     print('search query ', search_query)
-    results = run_query(search_query, None)
-    return render_template('index.html', results=results, search_query=search_query, vector='unchecked')
+    results = run_query(search_query, None, min_year, min_rating)
+    return render_template('index.html', results=results, search_query=search_query, vector='unchecked', min_year=min_year, min_rating=min_rating)
 
-@app.route('/vectorSearch/<search_query>', methods=['GET'])
-def vectorSearch(search_query):
+@app.route('/vectorSearch/<search_query>/<int(signed=True):min_year>/<float(signed=True):min_rating>', methods=['GET'])
+def vectorSearch(search_query, min_year, min_rating):
     print('vector search for ', search_query)
-    results = run_query(search_query, True)
-    return render_template('index.html', results=results, search_query=search_query, vector='checked')
+    results = run_query(search_query, True, min_year, min_rating)
+    return render_template('index.html', results=results, search_query=search_query, vector='checked', min_year=min_year, min_rating=min_rating)
 
 def generate_vector(data):
     model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
@@ -53,7 +59,7 @@ def add_highlights(highlight):
                 
     return txt
 
-def run_query(search_query, vector_search):
+def run_query(search_query, vector_search, min_year, min_rating):
     client = MongoClient(mongo_uri)
     db = client[db_name]
     collection = db[collection_name]
@@ -64,24 +70,40 @@ def run_query(search_query, vector_search):
                         'path': 'vectorPlot', 
                         'queryVector': generate_vector(search_query),
                         'numCandidates': 150, 
-                        'limit': 20
+                        'limit': 20,
+                        "filter": {
+                            "$and": [{"year": {"$gt": min_year}},
+                                    {"imdb.rating": {"$gte": min_rating}}
+                            ]
+                        }
                     }
                 }
     else:
         search = {  '$search': {
-                        'text': {
-                            'query': search_query,
-                            'path': 'fullplot',
-                            # 'fuzzy': {
-                            #     'maxEdits': 2,
-                            # },                        
+                        'compound': {
+                            'must': [{
+                                'text': {
+                                    'query': search_query,
+                                    'path': 'fullplot',
+                                }
+                            }],
+                            'filter': [{
+                                'range': {
+                                    'path': 'year',
+                                    'gt': min_year
+                                }},
+                                {'range': {
+                                    'path': 'imdb.rating',
+                                    'gte': min_rating
+                                },
+                            }]
                         },
                         'highlight': { 
                             'path': 'fullplot' 
                         }
                     }
                 }
-
+    print('search query: ', search)
     pipeline = [
         search,
         {
@@ -89,6 +111,8 @@ def run_query(search_query, vector_search):
                 '_id': 0,
                 'title': 1,
                 'fullplot': 1,
+                'year': 1,
+                'imdb.rating': 1,
                 'poster':1,
                 'score': {
                     '$meta': 'searchScore',

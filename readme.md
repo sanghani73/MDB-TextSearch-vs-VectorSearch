@@ -68,10 +68,23 @@ Once you have the data in the movies collection, navigate to the Atlas Search co
     "fields": {
       "fullplot": {
         "type": "string"
-    }
+      },
+      "imdb": {
+        "type": "document",
+        "fields": {
+          "rating": {
+            "type": "number"
+          }
+        }
+      },
+      "year": {
+        "type": "number"
+      }
+  }
   }
 }
 ```
+
 ```
 {
   "mappings": {
@@ -82,6 +95,14 @@ Once you have the data in the movies collection, navigate to the Atlas Search co
         "path": "vectorPlot",
         "numDimensions": 384,
         "similarity": "euclidean"
+      },
+      {
+        "type": "filter",
+        "path": "imdb.rating"
+      },
+      {
+        "type": "filter",
+        "path": "year"
       }
     ]
   }
@@ -101,7 +122,7 @@ python3 app.py
 This will launch the application on the default endpoint which is [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 
-The demo script itself is relatively simple, enter some search criteria for the types of movies you want to see and show the difference between the traditional search (which uses tokenisers and inverted indexes to identify relevant results) and vector search (which uses transformers based on ML models to return contextually relevant results). 
+The demo script itself is relatively simple, enter some search criteria for the types of movies you want to see and show the difference between the traditional search (which uses tokenisers and inverted indexes to identify relevant results) and vector search (which uses transformers based on ML models to return contextually relevant results). Additionally you can apply filters to retrieve films made after a certain year or wiht an IMDB rating higher than a certain value.
 
 A good example of this would be to search for  "funny animal adventure" and you'll see the different results:
 

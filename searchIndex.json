@@ -6,7 +6,18 @@
         "fields": {
           "fullplot": {
             "type": "string"
-        }
+          },
+          "imdb": {
+            "type": "document",
+            "fields": {
+              "rating": {
+                "type": "number"
+              }
+            }
+          },
+          "year": {
+            "type": "number"
+          }
       }
     },
     "name": "default"

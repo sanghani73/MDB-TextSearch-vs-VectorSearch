@@ -9,6 +9,14 @@
         "path": "vectorPlot",
         "numDimensions": 384,
         "similarity": "euclidean"
+      },
+      {
+        "type": "filter",
+        "path": "imdb.rating"
+      },
+      {
+        "type": "filter",
+        "path": "year"
       }
     ]
 }

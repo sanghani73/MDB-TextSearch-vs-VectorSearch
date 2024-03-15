@@ -31,7 +31,16 @@
         }
         .row {
             display: flex;
-            padding: 5px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10
+        }
+        .input-container {
+            flex: 1;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
+        .input-container:last-child {
+            margin-right: 0;
         }
         .spinner {
             display: none;
@@ -82,10 +91,6 @@
     <div class="search-box">
         <h1>Movie Search</h1>
         <form id="search-form" action="/" method="POST">
-            <!-- <div class="row"
-                <label for="vector_search">Semantic (Vector) Search?</label>
-                <input type="checkbox" name="vector_search" {{ vector }}>
-            </div> -->
             <div class="row">
                 <input type="text" name="search_query" placeholder="What type of film are you looking for?" value="{{ search_query }}" required>
                 <button type="submit" class="loading">
@@ -95,9 +100,20 @@
                     Go
                 </button>
             </div>
-            <div class="row"
-                <label for="vector_search">Semantic (Vector) Search?</label>
-                <input type="checkbox" name="vector_search" {{ vector }}>
+            <div><br></div>
+            <div class="row">
+                <div class="input-container">
+                    <label for="vector_search">Semantic (Vector) Search?</label>
+                    <input type="checkbox" name="vector_search" {{ vector }}>
+                </div>
+                <div class="input-container">
+                    <label for="min_year">Made After:</label>
+                    <input type="number" name="min_year" placeholder="1900" value="{{ min_year }}" min="1900" max="2024" step="1">
+                </div>
+                <div class="input-container">
+                    <label for="min_rating">Minimum IMDB Rating:</label>
+                    <input type="number" name="min_rating" placeholder="0.0" value="{{ min_rating }}" min="0" max="10" step=".1">
+                </div>
             </div>
         </form>
 
@@ -109,8 +125,10 @@
                         <div class="movie">
                             <h2>{{ movie.title }}</h2>
                             <img src="{{ movie.poster }}" alt="{{ movie.title }} Poster">
-                            <p>{{ movie.score }}</p>
-                            <p>{{ movie.fullplot|safe }}</p>
+                            <p style="text-align: left;"> <b>Search Score:</b> {{ movie.score }} <br>
+                                <b>Year:</b> {{ movie.year }} <br>
+                                <b>IMDB Rating:</b> {{ movie.imdb.rating }}</p>
+                            <p style="text-align: left;">{{ movie.fullplot|safe }}</p>
                         </div>
                     {% endfor %}
                 </div>
